@@ -1,0 +1,16 @@
+.env
+venv/
+*.db
+logs/
+__pycache__/
+backups/
+system_state.json
+legacy/
+backup.sh
+fix.sh
+manual_alert.py
+reset.sh
+test_telegram.py
+update_all.sh
+templates/index_new_dark.html
+templates/index_normal_old.html

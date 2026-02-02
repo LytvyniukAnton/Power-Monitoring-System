@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="uk" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>{{ page_title }} ⚡️</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons+Round" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/main.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <style>
+        /* Аварійний фікс, щоб не було білого фону поки грузиться CSS */
+        body { background: #0f172a; color: #f8fafc; }
+        .loader { position: fixed; inset: 0; background: #0f172a; display: flex; justify-content: center; align-items: center; z-index: 999; }
+    </style>
+</head>
+<body>
+<div id="loader" class="loader"><div class="spinner"></div></div>
+
+<div class="container">
+    <header>
+        <div class="brand">
+            <span class="material-icons-round" style="font-size:32px;color:var(--primary)">bolt</span>
+            <h1>{{ page_title }}</h1>
+        </div>
+        <div class="header-actions">
+            <div id="statusBadge" class="status-badge">
+                <span class="dot"></span>
+                <span id="statusText">...</span>
+            </div>
+        </div>
+        <div class="header-meta">
+            <span class="material-icons-round" style="font-size:18px">update</span>
+            <span>Оновлено: <strong id="lastUpdate">...</strong></span>
+        </div>
+    </header>
+
+    <div class="controls">
+        <div class="filters">
+            <button class="btn-filter" onclick="quickFilter(0, this)">Сьогодні</button>
+            <button class="btn-filter active" onclick="quickFilter(7, this)">7 днів</button>
+            <button class="btn-filter" onclick="quickFilter(30, this)">30 днів</button>
+            <button class="btn-filter" onclick="quickFilter('all', this)">Все</button>
+        </div>
+        <div class="date-inputs">
+            <input type="date" id="startDate">
+            <span>—</span>
+            <input type="date" id="endDate">
+            <button class="btn-refresh" onclick="customDateLoad()">
+                <span class="material-icons-round">refresh</span>
+            </button>
+        </div>
+    </div>
+
+    <div class="grid">
+        <div class="card">
+            <div class="card-icon" style="color:var(--success)"><span class="material-icons-round">power</span></div>
+            <h3 id="valOnPercent">--%</h3><span>Світло є</span>
+            <small id="valOnHours">--</small>
+        </div>
+        <div class="card">
+            <div class="card-icon" style="color:var(--danger)"><span class="material-icons-round">power_off</span></div>
+            <h3 id="valOffPercent">--%</h3><span>Немає світла</span>
+            <small id="valOffHours">--</small>
+        </div>
+        <div class="card">
+            <div class="card-icon" style="color:var(--warning)"><span class="material-icons-round">history</span></div>
+            <h3 id="valEvents">--</h3><span>Відключень</span>
+            <small id="valRange">...</small>
+        </div>
+        <div class="card">
+            <div class="card-icon" style="color:var(--primary)"><span class="material-icons-round">timer</span></div>
+            <h3 id="valAvg">--</h3><span>Сер. тривалість</span>
+        </div>
+    </div>
+
+    <div class="section">
+        <div class="section-header">
+            <h2>📊 Статистика за днями</h2>
+            <button class="theme-toggle" onclick="toggleChartView()">
+                <span class="material-icons-round">visibility_off</span>
+            </button>
+        </div>
+        <div style="height:300px; position: relative;"><canvas id="mainChart"></canvas></div>
+    </div>
+
+    <div class="section">
+        <h2>📜 Список відключень</h2>
+        <div id="eventsList"></div>
+    </div>
+</div>
+
+<script src="{{ url_for('static', filename='js/state.js') }}"></script>
+<script src="{{ url_for('static', filename='js/ui.js') }}"></script>
+<script src="{{ url_for('static', filename='js/chart.js') }}"></script>
+<script src="{{ url_for('static', filename='js/api.js') }}"></script>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        // Ховаємо лоадер коли все точно готове
+        setTimeout(() => {
+            const loader = document.getElementById('loader');
+            if(loader) loader.style.display = 'none';
+        }, 500);
+        quickFilter(7, document.querySelector('.btn-filter.active'));
+    });
+</script>
+</body>
+</html>
