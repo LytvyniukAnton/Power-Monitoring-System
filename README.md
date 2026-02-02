@@ -1,4 +1,4 @@
-# IoT Power Monitoring with ESP32 and Flask
+# IoT Power Monitoring System (ESP32 + Python Backend)
 
 ## Overview
 
